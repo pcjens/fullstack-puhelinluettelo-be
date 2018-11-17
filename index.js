@@ -28,6 +28,10 @@ let db = [
   }
 ]
 
+app.get('/info', (req, res) => {
+  res.type('text/html').send(`<p>Puhelinluettelossa ${db.length} henkilön tiedot.</p><p>${new Date()}</p>`)
+})
+
 app.get(API_PREFIX + '/persons', (req, res) => {
   res.json(db)
 })
