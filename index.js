@@ -36,6 +36,27 @@ app.get(API_PREFIX + '/persons', (req, res) => {
   res.json(db)
 })
 
+app.post(API_PREFIX + '/persons', (req, res) => {
+  let body = req.body;
+  if (!body.name) {
+    return res.status(400).json({ error: 'name missing' })
+  }
+  if (!body.number) {
+    return res.status(400).json({ error: 'number missing' })
+  }
+  if (db.find(person => person.name === body.name)) {
+    return res.status(400).json({ error: 'name must be unique' })
+  }
+  let newPerson = {
+    name: body.name,
+    number: body.number,
+    id: Math.floor(Math.pow(2, 31) * Math.random())
+  }
+  db = db.concat(newPerson)
+
+  res.json(newPerson)
+})
+
 app.get(API_PREFIX + '/persons/:id', (req, res) => {
   const id = Number(req.params.id)
   const person = db.find(person => person.id === id)
