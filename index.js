@@ -8,6 +8,7 @@ app.use(cors())
 morgan.token('payload', (req, res) => { return JSON.stringify(req.body) })
 app.use(morgan(":method :url :payload  :status :res[content-length] - :response-time ms"))
 app.use(bodyParser.json())
+app.use(express.static('build'))
 const API_PREFIX = '/api'
 
 let db = [
@@ -78,7 +79,7 @@ app.delete(API_PREFIX + '/persons/:id', (req, res) => {
   res.status(204).end()
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
