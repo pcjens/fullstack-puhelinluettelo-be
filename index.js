@@ -3,7 +3,8 @@ const app = express()
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 
-app.use(morgan('tiny'))
+morgan.token('payload', (req, res) => { return JSON.stringify(req.body) })
+app.use(morgan(":method :url :payload  :status :res[content-length] - :response-time ms"))
 app.use(bodyParser.json())
 const API_PREFIX = '/api'
 
