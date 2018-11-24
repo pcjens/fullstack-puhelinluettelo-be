@@ -11,8 +11,8 @@ const personSchema = new mongoose.Schema({
       isAsync: true,
       validator: (name, cb) => {
         return Person
-          .find({name})
-          .then(people => cb(people.length == 0, 'name must be unique'))
+          .find({ name })
+          .then(people => cb(people.length === 0, 'name must be unique'))
       },
     }
   },

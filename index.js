@@ -5,8 +5,8 @@ const morgan = require('morgan')
 const cors = require('cors')
 
 app.use(cors())
-morgan.token('payload', (req, res) => { return JSON.stringify(req.body) })
-app.use(morgan(":method :url :payload  :status :res[content-length] - :response-time ms"))
+morgan.token('payload', (req) => { return JSON.stringify(req.body) })
+app.use(morgan(':method :url :payload  :status :res[content-length] - :response-time ms'))
 app.use(bodyParser.json())
 app.use(express.static('build'))
 const API_PREFIX = '/api'
@@ -39,7 +39,7 @@ app.get(API_PREFIX + '/persons', (req, res) => {
 })
 
 app.post(API_PREFIX + '/persons', (req, res) => {
-  let body = req.body;
+  let body = req.body
   if (!body.name) {
     res.status(400).json({ error: 'name missing' })
   } else if (!body.number) {
@@ -65,7 +65,7 @@ app.post(API_PREFIX + '/persons', (req, res) => {
 })
 
 app.put(API_PREFIX + '/persons/:id', (req, res) => {
-  let body = req.body;
+  let body = req.body
   if (!body.number) {
     res.status(400).json({ error: 'number missing' })
   } else {
@@ -90,7 +90,7 @@ app.get(API_PREFIX + '/persons/:id', (req, res) => {
     .then(person => {
       res.json(Person.format(person))
     })
-    .catch(error => {
+    .catch(() => {
       res.status(400).send({ error: 'malformatted id' })
     })
 })
@@ -98,10 +98,10 @@ app.get(API_PREFIX + '/persons/:id', (req, res) => {
 app.delete(API_PREFIX + '/persons/:id', (req, res) => {
   Person
     .findByIdAndRemove(req.params.id)
-    .then(result => {
+    .then(() => {
       res.status(204).end()
     })
-    .catch(error => {
+    .catch(() => {
       res.status(400).send({ error: 'malformatted id' })
     })
 })

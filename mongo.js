@@ -15,12 +15,12 @@ const Person = mongoose.model('Person', {
 const addPerson = (name, number) => {
   Person.find({ name })
     .then(result => {
-      if (result.length == 0) {
+      if (result.length === 0) {
         console.log(`lisätään henkilö ${name} numero ${number} luetteloon`)
         let newPerson = new Person({
           name, number
         })
-        newPerson.save().then(response => {
+        newPerson.save().then(() => {
           mongoose.connection.close()
         })
       } else {
@@ -41,9 +41,9 @@ const printPeople = () => {
     })
 }
 
-if (process.argv.length == 4) {
+if (process.argv.length === 4) {
   addPerson(process.argv[2], process.argv[3])
-} else if (process.argv.length == 2) {
+} else if (process.argv.length === 2) {
   printPeople()
 } else {
   console.log('Usage:\n' +
