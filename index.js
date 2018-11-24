@@ -63,7 +63,7 @@ app.post(API_PREFIX + '/persons', (req, res) => {
               res.status(500).end()
             })
         } else {
-          res.status(400).json({ error: 'name must be unique' })
+          res.status(400).send({ error: 'name must be unique' })
         }
       })
       .catch(error => {
@@ -73,15 +73,31 @@ app.post(API_PREFIX + '/persons', (req, res) => {
   }
 })
 
+app.put(API_PREFIX + '/persons/:id', (req, res) => {
+  let body = req.body;
+  if (!body.number) {
+    res.status(400).json({ error: 'number missing' })
+  } else {
+    const updatedFields = {
+      number: body.number
+    }
+    Person
+      .findByIdAndUpdate(req.params.id, updatedFields, { new: true })
+      .then(updatedPerson => {
+        res.json(Person.format(updatedPerson))
+      })
+      .catch(error => {
+        console.log(error)
+        res.status(400).send({ error: 'malformatted id' })
+      })
+  }
+})
+
 app.get(API_PREFIX + '/persons/:id', (req, res) => {
   Person
     .findById(req.params.id)
-    .then(people => {
-      if (people.length >= 1) {
-        res.json(Person.format(people[0]))
-      } else {
-        res.status(404).end()
-      }
+    .then(person => {
+      res.json(Person.format(person))
     })
     .catch(error => {
       res.status(400).send({ error: 'malformatted id' })

@@ -5,6 +5,7 @@ mongoose.connect('mongodb://' +
                  process.env.DB_USER + ':' +
                  process.env.DB_PASS + '@' +
                  process.env.DB_CONN, { useNewUrlParser: true })
+mongoose.set('useFindAndModify', false)
 
 const personSchema = new mongoose.Schema({
   name: String,
@@ -19,7 +20,6 @@ personSchema.statics.format = (person) => {
     id: person._id
   }
 }
-
 const Person = mongoose.model('Person', personSchema)
 
 module.exports = Person
