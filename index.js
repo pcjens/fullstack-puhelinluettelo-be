@@ -45,30 +45,21 @@ app.post(API_PREFIX + '/persons', (req, res) => {
   } else if (!body.number) {
     res.status(400).json({ error: 'number missing' })
   } else {
-    Person
-      .find({ name: body.name })
-      .then(result => {
-        if (result.length == 0) {
-          let newPerson = new Person({
-            name: body.name,
-            number: body.number,
-            id: Math.floor(Math.pow(2, 31) * Math.random())
-          })
-          newPerson.save()
-            .then(person => {
-              res.json(Person.format(person))
-            })
-            .catch(error => {
-              console.log(error)
-              res.status(500).end()
-            })
-        } else {
-          res.status(400).send({ error: 'name must be unique' })
-        }
+    let newPerson = new Person({
+      name: body.name,
+      number: body.number,
+    })
+    newPerson.save()
+      .then(person => {
+        res.json(Person.format(person))
       })
       .catch(error => {
-        console.log(error)
-        res.status(500).end()
+        if (error.name === 'ValidationError') {
+          res.status(400).send({ error: error.errors['name'].message })
+        } else {
+          console.log(error)
+          res.status(500).end()
+        }
       })
   }
 })
