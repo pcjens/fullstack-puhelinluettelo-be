@@ -1,10 +1,7 @@
 require('dotenv').config()
 const mongoose = require('mongoose')
 
-mongoose.connect('mongodb://' +
-                 process.env.DB_USER + ':' +
-                 process.env.DB_PASS + '@' +
-                 process.env.DB_CONN, { useNewUrlParser: true })
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true })
 mongoose.set('useFindAndModify', false)
 
 const personSchema = new mongoose.Schema({
