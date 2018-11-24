@@ -84,13 +84,19 @@ app.get(API_PREFIX + '/persons/:id', (req, res) => {
       }
     })
     .catch(error => {
-      console.log(error)
       res.status(400).send({ error: 'malformatted id' })
     })
 })
 
 app.delete(API_PREFIX + '/persons/:id', (req, res) => {
-  res.status(500/*204*/).end()
+  Person
+    .findByIdAndRemove(req.params.id)
+    .then(result => {
+      res.status(204).end()
+    })
+    .catch(error => {
+      res.status(400).send({ error: 'malformatted id' })
+    })
 })
 
 const PORT = process.env.PORT || 3000
